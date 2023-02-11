@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  spring_micro_demo_a_auth_service_postgres_db:
+    image: postgres:14.1-alpine
+    container_name: spring_micro_demo_a_auth_service_postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=nurs
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=spring_micro_demo_a_auth_service_postgres_db
+    ports:
+      - '5421:5432'
+  spring_micro_demo_a_profile_service_postgres_db:
+    image: postgres:14.1-alpine
+    container_name: spring_micro_demo_a_profile_service_postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=nurs
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=spring_micro_demo_a_profile_service_postgres_db
+    ports:
+      - '5422:5432'

@@ -1,4 +1,3 @@
 rootProject.name = 'spring-micro-demo-a'
 
-//includeBuild 'eureka-server'
 
