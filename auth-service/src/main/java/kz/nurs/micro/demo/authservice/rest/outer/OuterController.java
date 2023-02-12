@@ -12,6 +12,7 @@ import kz.nurs.micro.demo.authservice.model.dto.req.SignupRequestDto;
 import kz.nurs.micro.demo.authservice.model.dto.resp.AuthResponseDto;
 import kz.nurs.micro.demo.authservice.model.entity.User;
 import kz.nurs.micro.demo.authservice.service.UserService;
+import kz.nurs.micro.demo.authservice.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,7 @@ public class OuterController {
     private final UserService userService;
     private final MapperFromEntity mapperFromEntity;
     private final ProfileServiceFeignClient profileServiceFeignClient;
-
-    @Value("${jwt.secret}")
-    private String secret;
+    private final JwtUtil jwtUtil;
 
     //должно сохранять/ регистрировать пользователя и в сервисе авторизации и в сервисе профиля
     @PostMapping("/signup")
@@ -66,18 +65,7 @@ public class OuterController {
         }
         AuthResponseDto authRespDtoFromEntity = mapperFromEntity.createAuthRespDtoFromEntity(user);
 
-        Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("email", user.getEmail());
-        tokenData.put("password", user.getPassword());
-        tokenData.put("enable", user.getEnable());
-        tokenData.put("token_create_date", new Date().getTime());
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, 100);
-        tokenData.put("token_expiration_date", calendar.getTime());
-        JwtBuilder jwtBuilder = Jwts.builder();
-        jwtBuilder.setExpiration(calendar.getTime());
-        jwtBuilder.setClaims(tokenData);
-        String token = jwtBuilder.signWith(SignatureAlgorithm.HS512, secret).compact();
+        String token = jwtUtil.generateToken(user);
         authRespDtoFromEntity.setAccessToken(token);
 
         return ResponseEntity.ok(authRespDtoFromEntity);
