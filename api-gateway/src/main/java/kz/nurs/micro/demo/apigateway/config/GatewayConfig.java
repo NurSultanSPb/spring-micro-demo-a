@@ -1,19 +1,17 @@
 package kz.nurs.micro.demo.apigateway.config;
 
 import kz.nurs.micro.demo.apigateway.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class GatewayConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter filter;
+    private final JwtAuthenticationFilter filter;
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
